@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ToDoList</title>
+</head>
+
+<body>
+    <h2>To Do List</h2>
+    <input id="Input" type="text"><button id="Add">add</button>
+    <ul id="List">
+
+    </ul>
+
+    <script>
+        const inputDOM = document.getElementById('Input');
+        const listDOM = document.getElementById('List');
+        const addDOM = document.getElementById('Add');
+
+        window.onload = () => {
+            inputDOM.addEventListener('keydown', (e) => { e.code === 'Enter' && Task(); });
+            addDOM.addEventListener('click', Task);
+        };
+
+        function Task() {
+            console.log('Task!');
+            addToList(inputDOM.value, listDOM);
+            inputDOM.value = '';
+        }
+
+        function addToList(str, list) {
+            if (!str) return;
+            const li = document.createElement('li');
+            li.innerHTML = `${str}`;
+
+            // list.append(li);
+            list.prepend (li);
+            // list.appendChild(li);
+            // list.insertBefore(li, list.firstChild)
+        }
+    </script>
+</body>
+
+</html>
