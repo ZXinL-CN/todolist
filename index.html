@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
@@ -20,25 +20,62 @@
         const addDOM = document.getElementById('Add');
 
         window.onload = () => {
+            console.log('onload');
+            loadingList();
             inputDOM.addEventListener('keydown', (e) => { e.code === 'Enter' && Task(); });
             addDOM.addEventListener('click', Task);
         };
 
+        function loadingList() {
+            const listData = JSON.parse(window.localStorage.getItem('List')) || [];
+            for( const str of listData.reverse()) {
+                addToList(str, listDOM);
+            }
+        }
+
+        window.onunload = () => {
+            console.log('onunload');
+            saveList();
+        }
+
+        function saveList() {
+            const listData = [];
+            for (const child of listDOM.children) {
+                if (child.nodeType === 1) {
+                    listData.push(child.innerHTML)
+                }
+            }
+            window.localStorage.setItem('List', JSON.stringify(listData))
+        }
+
         function Task() {
             console.log('Task!');
-            addToList(inputDOM.value, listDOM);
+            const li = addToList(inputDOM.value, listDOM);
+            addDelBtnToLi(li);
             inputDOM.value = '';
         }
 
         function addToList(str, list) {
             if (!str) return;
             const li = document.createElement('li');
-            li.innerHTML = `${str}`;
 
-            // list.append(li);
-            list.prepend (li);
-            // list.appendChild(li);
-            // list.insertBefore(li, list.firstChild)
+            li.innerHTML = `${str}`;
+            list.prepend(li);
+
+            return li;
+        }
+
+
+        function addDelBtnToLi(li) {
+            const delBtn = document.createElement('button');
+            delBtn.innerText = '删除'
+            delBtn.addEventListener('click', function (e) {
+                // delBtn.parentNode.parentNode.removeChild(delBtn.parentNode);
+                delBtn.parentElement.parentElement.removeChild(delBtn.parentElement);
+            })
+            li.appendChild(delBtn);
+
+            return delBtn;
         }
     </script>
 </body>
